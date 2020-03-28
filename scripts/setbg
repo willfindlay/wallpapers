@@ -19,7 +19,7 @@ BGLOC="$CACHEDIR/bg"
 [ ! -z "$1" ] && [ -d "$WALLPAPERDIR/$1" ] && ln -snfr "$(find "$(readlink -f "$WALLPAPERDIR/$1")" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "$BGLOC" && notify-send -i "$BGLOC" "Random wallpaper chosen."
 
 # If pywal is installed and user specified PYWAL, use it
-echo "Running pywal..." &&
-wal -s -i "$(readlink -f "$BGLOC")" #-o "$CONFIGDIR/wal/postrun" #>/dev/null 2>&1
+[ ! -z "$1" ] && echo "Running pywal..." &&
+wal -s -i "$(readlink -f "$BGLOC")" >/dev/null 2>&1 #-o "$CONFIGDIR/wal/postrun"
 
 xwallpaper --zoom "$BGLOC"
