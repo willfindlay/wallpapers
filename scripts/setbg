@@ -1,0 +1,26 @@
+#! /usr/bin/env sh
+
+# Based on Luke Smith's script of the same name
+#   https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/setbg
+
+# This script does the following:
+#	Run by itself, set the wallpaper (at X start).
+#	If given a file, set that as the new wallpaper.
+#	If given a subdirectory of $WALLPAPERDIR, choose random file in it.
+#	If wal is installed, also generate a colorscheme.
+
+CACHEDIR=${XDG_CACHE_HOME:-$HOME/.cache}
+CONFIGDIR=$HOME/.config
+WALLPAPERDIR=$CONFIGDIR/wallpapers
+BGLOC="$CACHEDIR/bg"
+
+[ -f "$1" ] && ln -snfr "$(readlink -f "$1")" "$BGLOC" && notify-send -i "$bgloc" "Changing wallpaper to $1..."
+
+[ ! -z "$1" ] && [ -d "$WALLPAPERDIR/$1" ] && ln -snfr "$(find "$(readlink -f "$WALLPAPERDIR/$1")" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "$BGLOC" && notify-send -i "$bgloc" "Random wallpaper chosen."
+
+# If pywal is installed and user specified PYWAL, use it
+[ ! -z $PYWAL ] &&
+    echo "Running pywal..." &&
+    wal -s -i "$(readlink -f "$BGLOC")" -o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun" >/dev/null 2>&1
+
+xwallpaper --zoom "$BGLOC"
