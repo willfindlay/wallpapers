@@ -14,12 +14,12 @@ CONFIGDIR=$HOME/.config
 WALLPAPERDIR=$CONFIGDIR/wallpapers
 BGLOC="$CACHEDIR/bg"
 
-[ -f "$1" ] && ln -snfr "$(readlink -f "$1")" "$BGLOC" && notify-send -i "$BGLOC" "Changing wallpaper to $1..."
+[ -f "$1" ] && ln -snfr "$(readlink -f "$1")" "$BGLOC" && notify-send -i "$BGLOC" "Changed wallpaper!" "$(readlink -f "$BGLOC")"
 
-[ ! -z "$1" ] && [ -d "$WALLPAPERDIR/$1" ] && ln -snfr "$(find "$(readlink -f "$WALLPAPERDIR/$1")" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "$BGLOC" && notify-send -i "$BGLOC" "Random wallpaper chosen."
+[ ! -z "$1" ] && [ -d "$WALLPAPERDIR/$1" ] && ln -snfr "$(find "$(readlink -f "$WALLPAPERDIR/$1")" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "$BGLOC" && notify-send -i "$BGLOC" "Random wallpaper chosen!" "$(readlink -f "$BGLOC")."
 
 # If pywal is installed and user specified PYWAL, use it
-[ ! -z "$1" ] && echo "Running pywal..." &&
+[ ! -z "$1" ] echo "Running pywal..." &&
 wal -s -i "$(readlink -f "$BGLOC")" >/dev/null 2>&1 #-o "$CONFIGDIR/wal/postrun"
 
 xwallpaper --zoom "$BGLOC"
